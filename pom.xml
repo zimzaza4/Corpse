@@ -51,6 +51,16 @@
     <build>
         <!-- The jarname on build. -->
         <finalName>${project.artifactId}-${project.version}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>9</source>
+                    <target>9</target>
+                </configuration>
+            </plugin>
+        </plugins>
         <!-- Replace all the ${} markers for all files in the supplied dir.. -->
         <resources>
             <resource>
@@ -58,17 +68,6 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
-
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.1</version>
-                <configuration>
-                    <outputDirectory>C:\Users\mehil\OneDrive\Desktop\spigot 1.20.2\plugins</outputDirectory>
-                </configuration>
-            </plugin>
-        </plugins>
 
     </build>
 </project>

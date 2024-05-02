@@ -1,5 +1,5 @@
 ## Set in seconds how long the corpse lasts. (-1 or lower for forever.)
-corpse-time: 10
+corpse-time: 800
 
 ## Sets if corpses spawn on death. (true or false)
 on-death: true

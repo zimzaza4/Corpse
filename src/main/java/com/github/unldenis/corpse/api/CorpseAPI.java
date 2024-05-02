@@ -27,6 +27,8 @@ import org.bukkit.entity.*;
 import org.bukkit.inventory.*;
 import org.jetbrains.annotations.*;
 
+import java.util.ArrayList;
+
 public class CorpseAPI {
 
   private static CorpseAPI instance;
@@ -71,7 +73,7 @@ public class CorpseAPI {
   public Corpse spawnCorpse(@NotNull Player player, @NotNull Location location) {
     Validate.notNull(player, "Player cannot be null");
     Validate.notNull(location, "Spawn location cannot be null");
-    return new Corpse(location, WrappedGameProfile.fromPlayer(player), null, player.getName());
+    return new Corpse(location, WrappedGameProfile.fromPlayer(player), null, new ArrayList<>(), player.getName());
   }
 
   /**
@@ -84,57 +86,7 @@ public class CorpseAPI {
   public Corpse spawnCorpse(@NotNull OfflinePlayer offlinePlayer, @NotNull Location location) {
     Validate.notNull(offlinePlayer, "OfflinePlayer cannot be null");
     Validate.notNull(location, "Spawn location cannot be null");
-    return new Corpse(location, offlinePlayer, null);
-  }
-
-  /**
-   * Method that creates a corpse in the given place and with the skin and name of the player with a
-   * custom inventory.
-   *
-   * @param location   The location where to spawn the corpse
-   * @param helmet     The helmet to put on the corpse
-   * @param chestPlate The chestPlate to put on the corpse
-   * @param leggings   The leggings to put on the corpse
-   * @param boots      The boots to put on the corpse
-   * @return a new Corpse object
-   */
-  public Corpse spawnCorpse(
-      @NotNull Player player,
-      @NotNull Location location,
-      @Nullable ItemStack helmet,
-      @Nullable ItemStack chestPlate,
-      @Nullable ItemStack leggings,
-      @Nullable ItemStack boots
-  ) {
-    Validate.notNull(player, "Player cannot be null");
-    Validate.notNull(location, "Spawn location cannot be null");
-    return new Corpse(location, WrappedGameProfile.fromPlayer(player),
-        new ItemStack[]{boots, leggings, chestPlate, helmet}, player.getName());
-  }
-
-  /**
-   * Method that creates a corpse in the given place and with the skin and name of the offlinePlayer
-   * with a custom inventory.
-   *
-   * @param location      The location where to spawn the corpse
-   * @param helmet        The helmet to put on the corpse
-   * @param chestPlate    The chestPlate to put on the corpse
-   * @param leggings      The leggings to put on the corpse
-   * @param boots         The boots to put on the corpse
-   * @return a new Corpse object
-   */
-  public Corpse spawnCorpse(
-      @NotNull OfflinePlayer offlinePlayer,
-      @NotNull Location location,
-      @Nullable ItemStack helmet,
-      @Nullable ItemStack chestPlate,
-      @Nullable ItemStack leggings,
-      @Nullable ItemStack boots
-  ) {
-    Validate.notNull(offlinePlayer, "OfflinePlayer cannot be null");
-    Validate.notNull(location, "Spawn location cannot be null");
-    return new Corpse(location, offlinePlayer,
-        new ItemStack[]{boots, leggings, chestPlate, helmet});
+    return new Corpse(location, offlinePlayer, null, new ArrayList<>());
   }
 
   /**

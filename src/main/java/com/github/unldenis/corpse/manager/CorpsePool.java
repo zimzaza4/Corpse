@@ -27,6 +27,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.*;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.*;
 import org.jetbrains.annotations.*;
 
@@ -186,22 +187,14 @@ public class CorpsePool implements Listener {
         .filter(corpse -> corpse.isShownFor(player))
         .forEach(corpse -> corpse.hide(player));
   }
-
-  @EventHandler
-  public void handleRespawn(PlayerRespawnEvent event) {
-    Player player = event.getPlayer();
-
-    this.corpseMap.values().stream()
-        .filter(corpse -> corpse.isShownFor(player))
-        .forEach(corpse -> corpse.hide(player));
-  }
-
   @EventHandler
   public void handleDeath(PlayerDeathEvent event) {
     //Fix player death message disappear
 //        event.setDeathMessage(null);
     if (onDeath) {
-      new Corpse(event.getEntity());
+      ItemStack[] armorContents = event.getEntity().getInventory().getArmorContents();
+      new Corpse(event.getEntity(), armorContents, event.getDrops());
+      event.getDrops().clear();
     }
   }
 

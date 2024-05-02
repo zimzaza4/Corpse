@@ -26,6 +26,8 @@ import org.bukkit.command.*;
 import org.bukkit.entity.*;
 import org.jetbrains.annotations.*;
 
+import java.util.ArrayList;
+
 public class SpawnCorpseCommand implements CommandExecutor {
 
   @Override
@@ -43,7 +45,7 @@ public class SpawnCorpseCommand implements CommandExecutor {
           if (target.isOnline()) {
             CorpseAPI.getInstance().spawnCorpse((Player) target, player.getLocation());
           } else {
-            new Corpse(player.getLocation(), target, null);
+            new Corpse(player.getLocation(), target, null, new ArrayList<>());
           }
           player.sendMessage(ChatColor.GREEN + "Corpse created");
           return true;

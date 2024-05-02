@@ -45,6 +45,8 @@ public class Corpse {
   private final Collection<Player> seeingPlayers = new CopyOnWriteArraySet<>();
   private final PacketLoader packetLoader;
   private final CorpsePool pool;
+  private final Inventory deathInventory;
+
   protected ItemStack[] armorContents;
   private boolean armor = false;
 
@@ -53,6 +55,7 @@ public class Corpse {
       @NotNull Location location,
       @NotNull WrappedGameProfile wrappedGameProfile,
       @Nullable ItemStack[] armorContents,
+      @Nullable List<ItemStack> droppedItems,
       @Nullable String name
   ) {
     pool = CorpsePool.getInstance();
@@ -62,14 +65,20 @@ public class Corpse {
     this.name = name == null ? ProfileUtils.randomName() : name;
     this.location = location;
     this.profile = new WrappedGameProfile(this.uuid, this.name);
+    this.armorContents = armorContents;
     //set skin to profile WrappedGameProfile
     wrappedGameProfile.getProperties().get("textures")
         .forEach(property -> profile.getProperties().put("textures", property));
-
     if (pool.isRenderArmor() && armorContents != null) {
       this.armorContents = armorContents.clone();
       this.armor = this.armorContents[0] != null || this.armorContents[1] != null
-          || this.armorContents[2] != null || this.armorContents[3] != null;
+              || this.armorContents[2] != null || this.armorContents[3] != null;
+    }
+    deathInventory = Bukkit.createInventory(null, 54, this.name);
+    if (droppedItems != null) {
+      for (ItemStack droppedItem : droppedItems) {
+        deathInventory.addItem(droppedItem);
+      }
     }
     //load packets
     packetLoader = new PacketLoader(this);
@@ -88,18 +97,23 @@ public class Corpse {
 
   }
 
-  public Corpse(@NotNull Player player) {
-    this(player.getLocation(), WrappedGameProfile.fromPlayer(player),
-        player.getInventory().getArmorContents(), player.getName());
+  public Corpse(@NotNull Player player, ItemStack[] armorContents, List<ItemStack> drops) {
+    this(player.getLocation(), WrappedGameProfile.fromPlayer(player), armorContents,
+        drops, player.getName());
   }
 
   public Corpse(
       @NotNull Location location,
       @NotNull OfflinePlayer offlinePlayer,
-      @Nullable ItemStack[] armorContents
+      @Nullable ItemStack[] armorContents,
+      @Nullable List<ItemStack> drops
   ) {
-    this(location, WrappedGameProfile.fromOfflinePlayer(offlinePlayer), armorContents,
+    this(location, WrappedGameProfile.fromOfflinePlayer(offlinePlayer), armorContents, drops,
         offlinePlayer.getName());
+  }
+
+  public Corpse(Player player) {
+    this(player, player.getInventory().getArmorContents(), new ArrayList<>());
   }
 
   @ApiStatus.Internal
@@ -196,6 +210,10 @@ public class Corpse {
   @NotNull
   public Location getLocation() {
     return location;
+  }
+
+  public Inventory getDeathInventory() {
+    return deathInventory;
   }
 
   @NotNull

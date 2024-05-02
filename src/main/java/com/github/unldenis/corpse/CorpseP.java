@@ -18,8 +18,10 @@
 
 package com.github.unldenis.corpse;
 
+import com.comphenix.protocol.ProtocolLibrary;
 import com.github.unldenis.corpse.command.*;
 import com.github.unldenis.corpse.data.*;
+import com.github.unldenis.corpse.listener.InteractListener;
 import com.github.unldenis.corpse.logic.*;
 import com.github.unldenis.corpse.manager.*;
 import org.bukkit.configuration.file.*;
@@ -53,6 +55,7 @@ public class CorpseP extends JavaPlugin {
 
     //load instance
     pool = CorpsePool.getInstance();
+    ProtocolLibrary.getProtocolManager().addPacketListener(new InteractListener(this));
   }
 
   @Override
